@@ -3,7 +3,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
     <title>dropdown Menu</title>
   </head>
   <body>
@@ -17,7 +17,7 @@
             <div class="dropdown-menu">
                 <ul>
                   <li><a href="#">Doctor Login</a></li>
-                  <li><a href="#">Doctor SignUp</a></li>
+                  <li><a href="./doctor/docReg.php">Doctor SignUp</a></li>
                 </ul>
               </div>
         </li>
@@ -26,7 +26,7 @@
             <div class="dropdown-menu">
                 <ul>
                 <li><a href="#">Patient Login</a></li>
-                <li><a href="#">Patient SignUp</a></li>
+                <li><a href="./patient/patientReg.php">Patient SignUp</a></li>
                 </ul>
             </div>
         </li>
