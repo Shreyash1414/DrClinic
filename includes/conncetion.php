@@ -6,10 +6,10 @@ $database="drclinic";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password,$database);
-
-// Check connection
-// if ($conn->connect_error) {
-//   die("Connection failed: " . $conn->connect_error);
-// }
-// echo "Connected successfully";
+if (!$conn){
+    die("Sorry we failed to connect: ". mysqli_connect_error());
+}
+else{
+ 
+}
 ?>

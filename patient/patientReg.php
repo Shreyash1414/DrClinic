@@ -9,22 +9,30 @@
     <title>dropdown Menu</title>
   </head>
   <body>
-    <div class="menu-bar">
+  <div class="menu-bar">
       <h1 class="logo">Dr<span>Clinic.</span></h1>
       <ul>
-        <li><a href="#">Home</a></li>
+        <li><a href="/drclinic">Home</a></li>
         <li><a href="#">About</a></li>
-        <li><a href="#">Pages <i class="fas fa-caret-down"></i></a>
+        <li><a href="#">Doctors <i class="fas fa-caret-down"></i></a>
 
             <div class="dropdown-menu">
                 <ul>
-                  <li><a href="#">Book Appoitment</a></li>
-                  <li><a href="#">Resgister</a></li>
+                  <li><a href="#">Doctor Login</a></li>
+                  <li><a href="/drclinic/doctor/docReg.php">Doctor SignUp</a></li>
                 </ul>
               </div>
         </li>
-        <li><a href="#">Doctor Login</a>
+        <li><a href="#">Patients <i class="fas fa-caret-down"></i></a>
+
+            <div class="dropdown-menu">
+                <ul>
+                <li><a href="#">Patient Login</a></li>
+                <li><a href="/drclinic/patient/patientReg.php">Patient SignUp</a></li>
+                </ul>
+            </div>
         </li>
+       
         <li><a href="#">Contact us</a></li>
       </ul>
     </div>
@@ -45,6 +53,19 @@
             $gender=$_POST['gender'];
             $address=$_POST['address'];
 
+
+          // Chechking if Patient already Present
+          $sql1="SELECT * FROM `patients` WHERE `contactNumber` LIKE '$contactNumber'";
+          $result1 = mysqli_query($conn, $sql1);
+          $num = mysqli_num_rows($result1);
+          if($num!=0)
+          {
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>This Number is Already Registered!</strong>.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+          }
+          else{
             $sql = "INSERT INTO `patients` (`firstName`, `lastName`, `birthDate`, `age`, `contactNumber`, `altContactNumber`, `aadhar`, `bloodGroup`, `gender`, `address`) VALUES ('$firstName', '$lastName', '$birthdate', '$age', '$contactNumber', '$altContactNum', '$aadhar', '$bloodGroup', '$gender', '$address')";
             $result = mysqli_query($conn,$sql);
             if($result)
@@ -57,6 +78,9 @@
             else{
                 echo "Some Error Occured";
             }
+          }
+
+            
         }
 
 

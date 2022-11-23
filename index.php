@@ -10,14 +10,14 @@
     <div class="menu-bar">
       <h1 class="logo">Dr<span>Clinic.</span></h1>
       <ul>
-        <li><a href="#">Home</a></li>
+        <li><a href="/drclinic">Home</a></li>
         <li><a href="#">About</a></li>
         <li><a href="#">Doctors <i class="fas fa-caret-down"></i></a>
 
             <div class="dropdown-menu">
                 <ul>
-                  <li><a href="#">Doctor Login</a></li>
-                  <li><a href="./doctor/docReg.php">Doctor SignUp</a></li>
+                  <li><a href="/drclinic/doctor/doctor_login">Doctor Login</a></li>
+                  <li><a href="/drclinic/doctor/docReg.php">Doctor SignUp</a></li>
                 </ul>
               </div>
         </li>
@@ -26,7 +26,7 @@
             <div class="dropdown-menu">
                 <ul>
                 <li><a href="#">Patient Login</a></li>
-                <li><a href="./patient/patientReg.php">Patient SignUp</a></li>
+                <li><a href="/drclinic/patient/patientReg.php">Patient SignUp</a></li>
                 </ul>
             </div>
         </li>
