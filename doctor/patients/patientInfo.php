@@ -4,21 +4,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Doctor Profile</title>
+    <title>Profile - Brand</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
 </head>
 
 <body id="page-top">
+
     <?php
-         session_start();
-         if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true)
-         {
-             header("location:/drclinic/doctor/doctor_login/index.php");
-             exit;
-         }
-         else{
+          session_start();
+          if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true)
+          {
+              header("location:/drclinic/doctor/doctor_login/index.php");
+              exit;
+          }
+          else{
            require "../../includes/conncetion.php";
            $user=$_SESSION['username'];
            $sql ="SELECT * FROM `doctors` WHERE `email` LIKE '$user'";
@@ -26,29 +27,17 @@
            $row = mysqli_fetch_assoc($result);
            $fName=$row['firstName'];
            $lName=$row['lastName'];
-           $address=$row['Address'];
-           $conNum=$row['contactNumber'];
-           $aadhar=$row['aadharNumber'];
-           $clinicAdd=$row['clinicAddress'];
-           $city=$row['city'];
-           $country=$row['country'];
-           $email=$row['email'];
 
-         }
+          }
+
+          if($_SERVER['REQUEST_METHOD']=='POST')
+          {
+            $number=$_POST['number'];
+            header("location:/drclinic/index.php?number=$number");
+          }
+
+
     ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <div id="wrapper">
@@ -152,7 +141,7 @@
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small"><?php  echo "$fName"." $lName"; ?></span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small"><?php echo"$fName"." $lName"; ?></span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Settings</a><a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Activity log</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
@@ -162,14 +151,10 @@
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <h3 class="text-dark mb-4">Profile</h3>
+                    <h3 class="text-dark mb-4">Patients</h3>
                     <div class="row mb-3">
                         <div class="col-lg-4 col-xl-12">
-                            <div class="card mb-3">
-                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="assets/img/dogs/image2.jpeg" width="160" height="160">
-                                    <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Change Photo</button></div>
-                                </div>
-                            </div>
+                            <div class="card mb-3"></div>
                         </div>
                         <div class="col-lg-8 col-xl-12">
                             <div class="row mb-3 d-none">
@@ -206,52 +191,20 @@
                                 <div class="col-xl-12 offset-xl-0">
                                     <div class="card shadow mb-3">
                                         <div class="card-header py-3">
-                                            <p class="text-primary m-0 fw-bold">User Settings</p>
+                                            <p class="text-primary m-0 fw-bold">Patient Info</p>
                                         </div>
                                         <div class="card-body">
-                                            <form>
+                                            <form method="post" action="/drclinic/doctor/patients/patientInfo.php">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label><input class="form-control" type="email" id="email" placeholder="<?php echo"$email" ?>" name="email"></div>
+                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Phone Number</strong><br></label><input class="form-control" type="text" id="number" placeholder="Enter the Phone Number" name="number"></div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>First Name</strong></label><input class="form-control" type="text" id="first_name" placeholder="<?php echo"$fName" ?>" name="first_name"></div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Last Name</strong></label><input class="form-control" type="text" id="last_name" placeholder="<?php echo"$lName" ?>" name="last_name"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
+                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Search</button></div>
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="card shadow">
-                                        <div class="card-header py-3">
-                                            <p class="text-primary m-0 fw-bold">Contact Settings</p>
-                                        </div>
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="mb-3"><label class="form-label" for="address"><strong>Address</strong></label><input class="form-control" type="text" id="address" placeholder="<?php echo"$address" ?>" name="address"></div>
-                                                <div class="mb-3"><label class="form-label" for="address"><strong>Clinic Address</strong><br></label><input class="form-control" type="text" id="address-1" placeholder="<?php echo"$clinicAdd" ?>" name="address"></div>
-                                                <div class="row">
-                                                    <div class="col-xl-6">
-                                                        <div class="mb-3"><label class="form-label" for="city"><strong>Contact Number</strong><br></label><input class="form-control" type="text" id="city" placeholder="<?php echo"$conNum" ?>" name="city"></div>
-                                                        <div class="mb-3"><label class="form-label" for="city"><strong>City</strong></label><input class="form-control" type="text" id="city-1" placeholder="<?php echo"$city" ?>" name="city"></div>
-                                                    </div>
-                                                    <div class="col-xl-5">
-                                                        <div class="mb-3"><label class="form-label" for="country"><strong>Aadhar Number</strong><br></label><input class="form-control" type="text" id="country" placeholder="<?php echo"$aadhar" ?>" name="country"></div>
-                                                        <div class="mb-3"><label class="form-label" for="country"><strong>Country</strong></label><input class="form-control" type="text" id="country-1" placeholder="<?php echo"$country" ?>" name="country"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3"></div>
-                                            </form>
-                                            <div class="col">
-                                                <div class="mb-3"></div>
-                                            </div><button class="btn btn-primary btn-sm" type="submit">Save&nbsp;Settings</button>
-                                        </div>
-                                    </div>
+                                    <div class="card shadow"></div>
                                 </div>
                             </div>
                         </div>
