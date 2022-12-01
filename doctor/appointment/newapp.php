@@ -11,6 +11,66 @@
 </head>
 
 <body id="page-top">
+
+    <?php
+         
+        session_start();
+        if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true)
+        {
+            header("location:/drclinic/doctor/doctor_login/index.php");
+            exit;
+        }
+        else{
+
+            require "../../includes/conncetion.php";
+            $user=$_SESSION['username'];
+            $sql ="SELECT * FROM `doctors` WHERE `email` LIKE '$user'";
+            $result = mysqli_query($conn,$sql);
+            $row = mysqli_fetch_assoc($result);
+            $fName=$row['firstName'];
+            $lName=$row['lastName'];
+
+
+            if($_SERVER['REQUEST_METHOD']=='POST')
+         {
+             $symp =$_POST['symptoms'];
+             $sugar=$_POST['sugar'];
+             $bloodPressure = $_POST['bloodPressure'];
+             $temp =$_POST['temp'];
+             $prescribe=$_POST['pres'];
+             $lastDate = $_POST['date'];
+             $report =$_POST['report'];
+             $carenIns =$_POST['careIns'];
+             $reqTest =$_POST['reqtest'];
+ 
+             // Taking number from parameter
+             $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+             $res = parse_url($url);
+             parse_str($res['query'], $params);
+             $phoneNum=$params['number'];
+ 
+             // Inserting Data into the Database
+             require "../../includes/conncetion.php";
+              $sql2="INSERT INTO `appointments` (`symptoms`, `bloodpressure`, `sugar`, `temp`, `prescribtion`, `careIns`, `lastDate`, `reqtest`, `report`, `patientId`, `docId`) VALUES ('$symp', '$bloodPressure', '$sugar', '$temp', '$prescribe', '$carenIns', '$lastDate', '$reqTest', '$report', '$phoneNum', '$user');";
+             $result2=mysqli_query($conn,$sql2);
+             if($result2)
+             {
+                 header("location:/drclinic/doctor/patient_profile/profile.php?number=$phoneNum");
+                 
+             }
+             else{
+                 echo "Something went Wrong";
+             }
+ 
+         }
+        }
+
+       
+
+
+    ?>
+
+
     <div id="wrapper">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
@@ -112,7 +172,7 @@
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small">Valerie Luna</span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small"><?php echo "$fName"." $lName" ?></span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Settings</a><a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Activity log</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
@@ -122,7 +182,7 @@
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <h3 class="text-dark mb-4">Patient Profile</h3>
+                    <h3 class="text-dark mb-4">Profile</h3>
                     <div class="row mb-3">
                         <div class="col-lg-12">
                             <div class="row mb-3 d-none">
@@ -162,46 +222,39 @@
                                             <p class="text-primary m-0 fw-bold">User Settings</p>
                                         </div>
                                         <div class="card-body">
-                                            <form>
+                                            <form method="post" action="/drclinic/doctor/appointment/newapp.php?number=8080012172">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="username"><strong>First Name</strong><br></label><input class="form-control" type="text" id="username" placeholder="user.name" name="username"></div>
+                                                        <div class="mb-3"><label class="form-label" for="username"><strong>Symptoms</strong><br></label><input class="form-control" type="text" id="username" placeholder="Enter The Symptoms" name="symptoms"></div>
+                                                        <div class="mb-3"><label class="form-label" for="username"><strong>Sugar</strong><br></label><input class="form-control" type="text" id="sugar" placeholder="Enter The Sugar Level" name="sugar"></div>
                                                     </div>
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Last Name</strong><br></label><input class="form-control" type="email" id="email" placeholder="user@example.com" name="email"></div>
+                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Blood Pressure</strong><br></label><input class="form-control" type="text" id="bloodPressure" placeholder="Enter The Blood Pressure" name="bloodPressure"></div>
+                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Temperature</strong><br></label><input class="form-control" type="text" id="temp" placeholder="Enter The Temperature" name="temp"></div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Brithday</strong><br></label><input class="form-control" type="date"></div>
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Contact Number</strong><br></label><input class="form-control" type="text" id="username-1" placeholder="user.name" name="username"></div>
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Email</strong><br></label><input class="form-control" type="text" id="username-2" placeholder="user.name" name="username"></div>
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Gender</strong><br></label><input class="form-control" type="text" id="username-3" placeholder="user.name" name="username"></div>
+                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Prescribtion</strong><br></label><textarea class="form-control" style="padding-top: 12px;margin-top: -4px;" name="pres"></textarea></div>
+                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Date</strong><br></label><input class="form-control" type="date" name="date"></div>
+                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Report</strong><br></label><textarea class="form-control" name="report"></textarea></div>
                                                     </div>
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Age</strong><br></label><input class="form-control" type="text" id="last_name" placeholder="Doe" name="last_name"></div>
-                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Alternate Contact Number</strong><br></label><input class="form-control" type="text" id="last_name-1" placeholder="Doe" name="last_name"></div>
-                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Blood Group</strong><br></label><input class="form-control" type="text" id="last_name-2" placeholder="Doe" name="last_name"></div>
-                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Address</strong><br></label><input class="form-control" type="text" id="last_name-3" placeholder="Doe" name="last_name"></div>
+                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Care Instruction</strong><br></label><textarea class="form-control" style="padding-top: 5px;margin-top: -5px;padding-bottom: 13px;" name="careIns"></textarea></div>
+                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Required Test</strong><br></label><input class="form-control" type="text" name="reqtest" placeholder="Enter the Tests"></div>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3"></div>
-                                            </form><button class="btn btn-primary btn-sm" type="submit">Save Settings</button>
+                                                <button class="btn btn-primary btn-sm" type="submit">Save Data</button>
+                                            </form>
                                         </div>
                                     </div>
-                                    <div class="card shadow">
-                                        <div class="card"></div>
-                                    </div>
+                                    <div class="card shadow"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="row">
-                            <div class="col"><button class="btn btn-primary" type="button" style="margin-right: 49px;">New Appointment</button></div>
-                            <div class="col"><button class="btn btn-primary" type="button">Previous Appointments</button></div>
-                        </div>
-                    </div>
+                    <div class="card shadow mb-5"></div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">

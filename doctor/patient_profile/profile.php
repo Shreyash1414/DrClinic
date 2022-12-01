@@ -13,31 +13,59 @@
 <body id="page-top">
 
     <?php
-          session_start();
-          if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true)
-          {
-              header("location:/drclinic/doctor/doctor_login/index.php");
-              exit;
-          }
-          else{
-           require "../../includes/conncetion.php";
-           $user=$_SESSION['username'];
-           $sql ="SELECT * FROM `doctors` WHERE `email` LIKE '$user'";
-           $result = mysqli_query($conn,$sql);
-           $row = mysqli_fetch_assoc($result);
-           $fName=$row['firstName'];
-           $lName=$row['lastName'];
+        session_start();
+        if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true)
+        {
+            header("location:/drclinic/doctor/doctor_login/index.php");
+            exit;
+        }
+        else{
+            require "../../includes/conncetion.php";
+            $user=$_SESSION['username'];
+            $sql ="SELECT * FROM `doctors` WHERE `email` LIKE '$user'";
+            $result = mysqli_query($conn,$sql);
+            $row = mysqli_fetch_assoc($result);
+            $fName=$row['firstName'];
+            $lName=$row['lastName'];
 
-          }
 
-          if($_SERVER['REQUEST_METHOD']=='POST')
-          {
-            $number=$_POST['number'];
-            header("location:/drclinic/doctor/patient_profile/profile.php?number=$number");
-          }
+            // Taking Parameters from url
+            $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $res = parse_url($url);
+            parse_str($res['query'], $params);
+            $phoneNum=$params['number'];
+            $sql2="SELECT * FROM `patients` WHERE `contactNumber` LIKE '$phoneNum'";
+            $result2 = mysqli_query($conn,$sql2);
+            $row2 = mysqli_fetch_assoc($result2);
 
+
+            // Getting All the variables from the database
+            $firstName=$row2['firstName'];
+            $lastName=$row2['lastName'];
+            $birthDate=$row2['birthDate'];
+            $age=$row2['age'];
+            $contact=$row2['contactNumber'];
+            $altContact=$row2['altContactNumber'];
+            $aadhar=$row2['aadhar']; 
+            $bloodGroup = $row2['bloodGroup'];
+            $gender = $row2['gender'];
+            $address = $row2['address'];
+
+        }
+    ?>
+
+    <?php
+
+        function redirect(){
+            header("location:/drclinic/doctor/appointment/newapp.php?number=$phoneNum");
+        }
 
     ?>
+
+
+
+
+
 
 
     <div id="wrapper">
@@ -48,10 +76,10 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar-1">
-                    <li class="nav-item"><a class="nav-link" href="/drclinic/doctor/doc_dash/index.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/drclinic/doctor/doc_profile/profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="table.html"><i class="fas fa-table"></i><span>Appoitments</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/drclinic/doctor/patients/patientInfo.php"><i class="far fa-user-circle"></i><span>Patient</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html"><i class="far fa-user-circle"></i><span>Patient</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="register.html"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle-1" type="button"></button></div>
@@ -141,7 +169,7 @@
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small"><?php echo"$fName"." $lName"; ?></span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small">Valerie Luna</span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Settings</a><a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Activity log</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
@@ -151,12 +179,9 @@
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <h3 class="text-dark mb-4">Patients</h3>
+                    <h3 class="text-dark mb-4">Patient Profile</h3>
                     <div class="row mb-3">
-                        <div class="col-lg-4 col-xl-12">
-                            <div class="card mb-3"></div>
-                        </div>
-                        <div class="col-lg-8 col-xl-12">
+                        <div class="col-lg-12">
                             <div class="row mb-3 d-none">
                                 <div class="col">
                                     <div class="card text-white bg-primary shadow">
@@ -188,25 +213,50 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xl-12 offset-xl-0">
+                                <div class="col-lg-12">
                                     <div class="card shadow mb-3">
                                         <div class="card-header py-3">
-                                            <p class="text-primary m-0 fw-bold">Patient Info</p>
+                                            <p class="text-primary m-0 fw-bold">User Settings</p>
                                         </div>
                                         <div class="card-body">
-                                            <form method="post" action="/drclinic/doctor/patients/patientInfo.php">
+                                            <form>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Phone Number</strong><br></label><input class="form-control" type="text" id="number" placeholder="Enter the Phone Number" name="number"></div>
+                                                        <div class="mb-3"><label class="form-label" for="username"><strong>First Name</strong><br></label><input class="form-control" type="text" id="username" placeholder=<?php echo $firstName ?> name="username"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Last Name</strong><br></label><input class="form-control" type="email" id="email" placeholder=<?php echo $lastName ?>  name="email"></div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Search</button></div>
-                                            </form>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Brithday</strong><br></label><input class="form-control" type="date" placeholder=<?php echo $birthDate ?>></div>
+                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Contact Number</strong><br></label><input class="form-control" type="text" id="username-1" placeholder=<?php echo $contact ?> name="username"></div>
+                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Aadhar Number</strong><br></label><input class="form-control" type="text" id="username-2" placeholder=<?php echo $aadhar ?> name="username"></div>
+                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Gender</strong><br></label><input class="form-control" type="text" id="username-3" placeholder=<?php echo $gender?> name="username"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Age</strong><br></label><input class="form-control" type="text" id="last_name" placeholder=<?php echo $age ?> name="last_name"></div>
+                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Alternate Contact Number</strong><br></label><input class="form-control" type="text" id="last_name-1" placeholder=<?php echo $altContact ?> name="last_name"></div>
+                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Blood Group</strong><br></label><input class="form-control" type="text" id="last_name-2" placeholder=<?php echo $bloodGroup ?> name="last_name"></div>
+                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Address</strong><br></label><input class="form-control" type="text" id="last_name-3" placeholder=<?php echo $address ?> name="last_name"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div>
+                                            </form><button class="btn btn-primary btn-sm" type="submit">Save Settings</button>
                                         </div>
                                     </div>
-                                    <div class="card shadow"></div>
+                                    <div class="card shadow">
+                                        <div class="card"></div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="row">
+                            <div class="col"><button class="btn btn-primary" type="button" onclick="window.location.href='/drclinic/doctor/appointment/newapp.php?number=<?php echo $phoneNum; ?>'" style="margin-right: 49px;">New Appointment</button></div>
+                            <div class="col"><button class="btn btn-primary" type="button">Previous Appointments</button></div>
                         </div>
                     </div>
                 </div>
