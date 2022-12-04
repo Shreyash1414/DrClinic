@@ -25,7 +25,7 @@
 
             <div class="dropdown-menu">
                 <ul>
-                <li><a href="#">Patient Login</a></li>
+                <li><a href="/drclinic/patient/patientLogin/index.php">Patient Login</a></li>
                 <li><a href="/drclinic/patient/patientReg.php">Patient SignUp</a></li>
                 </ul>
             </div>

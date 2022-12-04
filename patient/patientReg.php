@@ -52,6 +52,8 @@
             $bloodGroup=$_POST['bloodGroup'];
             $gender=$_POST['gender'];
             $address=$_POST['address'];
+            $password=$_POST['pass'];
+            $confirmPass=$_POST['confPass'];
 
 
           // Chechking if Patient already Present
@@ -66,7 +68,7 @@
             </div>';
           }
           else{
-            $sql = "INSERT INTO `patients` (`firstName`, `lastName`, `birthDate`, `age`, `contactNumber`, `altContactNumber`, `aadhar`, `bloodGroup`, `gender`, `address`) VALUES ('$firstName', '$lastName', '$birthdate', '$age', '$contactNumber', '$altContactNum', '$aadhar', '$bloodGroup', '$gender', '$address')";
+            $sql = "INSERT INTO `patients` (`firstName`, `lastName`, `birthDate`, `age`, `contactNumber`, `altContactNumber`, `aadhar`, `bloodGroup`, `gender`, `address`,`password`,`confirmPassword`) VALUES ('$firstName', '$lastName', '$birthdate', '$age', '$contactNumber', '$altContactNum', '$aadhar', '$bloodGroup', '$gender', '$address','$password','$confirmPass')";
             $result = mysqli_query($conn,$sql);
             if($result)
             {
@@ -129,12 +131,23 @@
 
             <div class="input-box">
               <span class="details">Blood Group:</span>
-              <input type="text" id="bloodGroup" name="bloodGroup" placeholder="Enter your Blood Group">
+              <select name="bloodGroup" id="gender" class="bigBox">
+                <option value="male">Choose</option>
+                <option value="female">B+</option>
+                <option value="other">A+</option>
+                <option value="other">A-</option>
+                <option value="other">B-</option>
+                <option value="other">AB-</option>
+                <option value="other">AB+</option>
+                <option value="other">O+</option>
+                <option value="other">O-</option>
+
+              </select>
             </div>
 
             <div class="input-box">
               <span class="details">Gender:</span>
-              <select name="gender" id="gender" >
+              <select name="gender" id="gender" class="bigBox">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
