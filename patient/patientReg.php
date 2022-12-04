@@ -146,6 +146,17 @@
               <span class="details">Address:</span>
               <input type="text" id="address" name="address" placeholder="Enter your Addres">
             </div>
+
+            <div class="input-box">
+              <span class="details">Password:</span>
+              <input type="text" id="pass" name="pass" placeholder="Enter your Password">
+            </div>
+
+            <div class="input-box">
+              <span class="details">Confirm password:</span>
+              <input type="text" id="confPass" name="confPass" placeholder="Enter your Password Agian">
+            </div>
+
           
           </div>
           <div class="button">

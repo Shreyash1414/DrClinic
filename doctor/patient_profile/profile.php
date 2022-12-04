@@ -64,10 +64,6 @@
 
 
 
-
-
-
-
     <div id="wrapper">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
@@ -256,7 +252,7 @@
                     <div class="card">
                         <div class="row">
                             <div class="col"><button class="btn btn-primary" type="button" onclick="window.location.href='/drclinic/doctor/appointment/newapp.php?number=<?php echo $phoneNum; ?>'" style="margin-right: 49px;">New Appointment</button></div>
-                            <div class="col"><button class="btn btn-primary" type="button">Previous Appointments</button></div>
+                            <div class="col"><button class="btn btn-primary" type="button" onclick="window.location.href='/drclinic/doctor/prevAppointments/prevApp.php?number=<?php echo $phoneNum; ?>'">Previous Appointments</button></div>
                         </div>
                     </div>
                 </div>

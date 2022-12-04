@@ -4,16 +4,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Profile - Brand</title>
+    <title>Table - Brand</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
 </head>
 
 <body id="page-top">
-
     <?php
-         
         session_start();
         if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true)
         {
@@ -21,7 +19,6 @@
             exit;
         }
         else{
-
             require "../../includes/conncetion.php";
             $user=$_SESSION['username'];
             $sql ="SELECT * FROM `doctors` WHERE `email` LIKE '$user'";
@@ -29,56 +26,12 @@
             $row = mysqli_fetch_assoc($result);
             $fName=$row['firstName'];
             $lName=$row['lastName'];
-
-
-            if($_SERVER['REQUEST_METHOD']=='POST')
-         {
-             $symp =$_POST['symptoms'];
-             $sugar=$_POST['sugar'];
-             $bloodPressure = $_POST['bloodPressure'];
-             $temp =$_POST['temp'];
-             $prescribe=$_POST['pres'];
-             $lastDate = $_POST['date'];
-             $report =$_POST['report'];
-             $carenIns =$_POST['careIns'];
-             $reqTest =$_POST['reqtest'];
-
-             date_default_timezone_set('Asia/Kolkata');
-             $currTime= date("H:i:s");
-
-             $timestamp = strtotime($lastDate);
-             $day = date('D', $timestamp);
- 
-             // Taking number from parameter
-             $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-             $res = parse_url($url);
-             parse_str($res['query'], $params);
-             $phoneNum=$params['number'];
- 
-             // Inserting Data into the Database
-             require "../../includes/conncetion.php";
-              $sql2="INSERT INTO `appointments` (`symptoms`, `bloodpressure`, `sugar`, `temp`, `prescribtion`, `careIns`, `lastDate`, `reqtest`, `report`, `patientId`, `docId`,`day`,`time`) VALUES ('$symp', '$bloodPressure', '$sugar', '$temp', '$prescribe', '$carenIns', '$lastDate', '$reqTest', '$report', '$phoneNum', '$user','$day','$currTime');";
-             $result2=mysqli_query($conn,$sql2);
-             if($result2)
-             {
-                 header("location:/drclinic/doctor/patient_profile/profile.php?number=$phoneNum");
-                 
-             }
-             else{
-                 echo "Something went Wrong";
-             }
- 
-         }
         }
 
-       
+    ?>
 
 
-    ?>
-    <?php
-        $currTime = time();
-        echo"$currTime"; 
-    ?>
+
 
     <div id="wrapper">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
@@ -89,8 +42,8 @@
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar-1">
                     <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="table.html"><i class="fas fa-table"></i><span>Appoitments</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="table.html"><i class="fas fa-table"></i><span>Appoitments</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="login.html"><i class="far fa-user-circle"></i><span>Patient</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="register.html"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
                 </ul>
@@ -191,79 +144,77 @@
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <h3 class="text-dark mb-4">Profile</h3>
-                    <div class="row mb-3">
-                        <div class="col-lg-12">
-                            <div class="row mb-3 d-none">
-                                <div class="col">
-                                    <div class="card text-white bg-primary shadow">
-                                        <div class="card-body">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <p class="m-0">Peformance</p>
-                                                    <p class="m-0"><strong>65.2%</strong></p>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
-                                            </div>
-                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
-                                        </div>
-                                    </div>
+                    <h3 class="text-dark mb-4">Previous Appoitments</h3>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Dates</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 text-nowrap">
+                                    <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Show&nbsp;<select class="d-inline-block form-select form-select-sm">
+                                                <option value="10" selected="">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>&nbsp;</label></div>
                                 </div>
-                                <div class="col">
-                                    <div class="card text-white bg-success shadow">
-                                        <div class="card-body">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <p class="m-0">Peformance</p>
-                                                    <p class="m-0"><strong>65.2%</strong></p>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
-                                            </div>
-                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
-                                        </div>
-                                    </div>
+                                <div class="col-md-6">
+                                    <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
                                 </div>
                             </div>
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Day</th>
+                                            <th>Time</th>
+                                        </tr>
+                                    </thead>
+                                    <?php
+
+                                        $sql2="SELECT * FROM `appointments` WHERE `patientId` = 8080012172 AND `docId` LIKE 'shreyashpatilst@gmail.com'";
+                                        $result2= mysqli_query($conn,$sql2);
+                                        while($row2 = mysqli_fetch_assoc($result2))
+                                        {
+                                            echo" <tbody>
+                                                <tr>
+                                                    <td><a href='/drclinic/doctor/appointment/newapp.php'>".$row2['lastDate']."<a></td>
+                                                    <td>".$row2['day']."</td>
+                                                    <td>".$row2['time']."</td>
+                                                </tr>
+                                            </tbody>";
+                                        }
+                                    
+                                    ?>
+                                    <tfoot>
+                                        <tr>
+                                            <th><strong>Date</strong></th>
+                                            <th><strong>Day</strong></th>
+                                            <th><strong>Time</strong></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                             <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card shadow mb-3">
-                                        <div class="card-header py-3">
-                                            <p class="text-primary m-0 fw-bold">User Settings</p>
-                                        </div>
-                                        <div class="card-body">
-                                            <form method="post" action="/drclinic/doctor/appointment/newapp.php?number=8080012172">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="username"><strong>Symptoms</strong><br></label><input class="form-control" type="text" id="username" placeholder="Enter The Symptoms" name="symptoms"></div>
-                                                        <div class="mb-3"><label class="form-label" for="username"><strong>Sugar</strong><br></label><input class="form-control" type="text" id="sugar" placeholder="Enter The Sugar Level" name="sugar"></div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Blood Pressure</strong><br></label><input class="form-control" type="text" id="bloodPressure" placeholder="Enter The Blood Pressure" name="bloodPressure"></div>
-                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Temperature</strong><br></label><input class="form-control" type="text" id="temp" placeholder="Enter The Temperature" name="temp"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Prescribtion</strong><br></label><textarea class="form-control" style="padding-top: 12px;margin-top: -4px;" name="pres"></textarea></div>
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Date</strong><br></label><input class="form-control" type="date" name="date"></div>
-                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>Report</strong><br></label><textarea class="form-control" name="report"></textarea></div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Care Instruction</strong><br></label><textarea class="form-control" style="padding-top: 5px;margin-top: -5px;padding-bottom: 13px;" name="careIns"></textarea></div>
-                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Required Test</strong><br></label><input class="form-control" type="text" name="reqtest" placeholder="Enter the Tests"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3"></div>
-                                                <button class="btn btn-primary btn-sm" type="submit">Save Data</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="card shadow"></div>
+                                <div class="col-md-6 align-self-center">
+                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                        <ul class="pagination">
+                                            <li class="page-item disabled"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
+                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card shadow mb-5"></div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">
@@ -274,6 +225,7 @@
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
 </body>
 
