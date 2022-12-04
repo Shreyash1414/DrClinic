@@ -68,7 +68,8 @@
             </div>';
           }
           else{
-            $sql = "INSERT INTO `patients` (`firstName`, `lastName`, `birthDate`, `age`, `contactNumber`, `altContactNumber`, `aadhar`, `bloodGroup`, `gender`, `address`,`password`,`confirmPassword`) VALUES ('$firstName', '$lastName', '$birthdate', '$age', '$contactNumber', '$altContactNum', '$aadhar', '$bloodGroup', '$gender', '$address','$password','$confirmPass')";
+            $hash=password_hash($password, PASSWORD_DEFAULT);
+            $sql = "INSERT INTO `patients` (`firstName`, `lastName`, `birthDate`, `age`, `contactNumber`, `altContactNumber`, `aadhar`, `bloodGroup`, `gender`, `address`,`password`) VALUES ('$firstName', '$lastName', '$birthdate', '$age', '$contactNumber', '$altContactNum', '$aadhar', '$bloodGroup', '$gender', '$address','$hash')";
             $result = mysqli_query($conn,$sql);
             if($result)
             {

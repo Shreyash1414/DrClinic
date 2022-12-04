@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css" />
-    <title>Patient Login</title>
+    <title>dropdown Menu</title>
   </head>
   <body>
     <?php
@@ -14,11 +14,11 @@
           $msg=false;
           if($_SERVER['REQUEST_METHOD']=='POST')
           {
-            $number=$_POST['phoneNum'];
+            $email=$_POST['email'];
             $password=$_POST['pass'];
           
 
-            $sql="SELECT * FROM `patients` WHERE `contactNumber` = $number";
+            $sql="SELECT * FROM `doctors` WHERE `email` LIKE '$email'";
             $result= mysqli_query($conn,$sql);
             $num=mysqli_num_rows($result);
             if($num==1)
@@ -30,7 +30,7 @@
                       session_start();
                       $login=true;
                       $_SESSION['loggedin']=true;
-                      $_SESSION['username']=$number;
+                      $_SESSION['username']=$email;
                       header("location:/drclinic/doctor/doc_dash/index.php");
                     }
                     else{
@@ -97,13 +97,13 @@
     ?>
 
     <div class="container">
-      <div class="title">Patient Log In</div>
+      <div class="title">Log In</div>
       <div class="content">
         <form action="/drclinic/doctor/doctor_login/index.php" method="post">
           <div class="user-details">
             <div class="input-box">
-              <span class="details">Phone Number</span>
-              <input type="text" id="phoneNum" name="phoneNum" placeholder="Enter your Phone Number" required>
+              <span class="details">Email</span>
+              <input type="text" id="email" name="email" placeholder="Enter your email" required>
             </div>
          
             <div class="input-box">
